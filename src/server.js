@@ -3,18 +3,13 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 dotenv.config();
 
+const { User } = require("./models/user.js");
 const cookieParser = require("cookie-parser");
-// const authRoutes = require("./routes/authRoutes.js");
+const authRoutes = require("./routes/authRoutes.js");
 const { sequelize } = require("./config/db.js");
 
 
 const app = express();
-
-app.use(express.json());
-app.use(cookieParser());
-
-//routes
-// app.use("/api/auth", authRoutes);
 
 app.use(
     cors({
@@ -22,6 +17,12 @@ app.use(
          credentials: true,
     })
 );
+
+app.use(express.json());
+app.use(cookieParser());
+
+//routes
+app.use("/api/auth", authRoutes);
 
 //test db connection
 sequelize
