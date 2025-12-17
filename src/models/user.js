@@ -25,4 +25,11 @@ const User = sequelize.define("User", {
     timestamps: true,
 });
 
+User.associate = (models) => {
+    User.hasOne(models.Resume, {
+        foreignKey: "userId",
+        as: "resume",   
+    });
+};
+
 module.exports = {User};
