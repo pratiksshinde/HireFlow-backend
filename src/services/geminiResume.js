@@ -85,8 +85,14 @@ const extractStructuredResume = async (resumeText) => {
     8. Dates MUST be plain text like "Jan 2023"
     9. Extract ONLY hyperlinks present in resume
     10. Do NOT invent data
+    11. For skills, categorize into technical, frameworks, databases, tools, soft skills
+    12. For projects, include tech stack as array of strings
+    13. please do not add any additional fields other than mentioned in the schema
+    14. please do not add any example links or any example data other than mentioned in the schema
 
-    Schema:
+
+    Extract the resume data into the following JSON schema.
+    Here is the schema:
     ${JSON.stringify(schema, null, 2)}
 
     Resume text:

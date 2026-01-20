@@ -69,5 +69,14 @@ const logout = (req, res) => {
     return res.status(200).json({ message: "Logout Successful" });
 }
 
+const me = (req,res) =>{
+    try {
+        const user = req.user.id;
+        const username = req.user.username;
+        return res.status(200).json({user,username});
+    } catch (error) {
+        return res.status(500).json({ message: "Server Error", error: error.message });
+    }
+}
 
-module.exports = { Login, register, logout };
+module.exports = { Login, register, logout, me };

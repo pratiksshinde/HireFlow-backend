@@ -156,4 +156,19 @@ const getPortfolio = async (req, res) => {
     });
 }
 
-module.exports = { uploadResume , getPortfolio};
+
+const getProfileData = async (req,res)=>{
+    try {
+        const userId = req.user.id;
+        if(!userId){
+            return res.status(401).json({message:"Not Authenticated!!!"});
+        }
+        const resumeData = await Resume.findOne({where: {userId: userId} });
+        return res.status(200).json({resumeData})
+    } catch (error) {
+        return res.status(501).json({message:"Internal Server Error!!!"});
+    }
+}
+
+
+module.exports = { uploadResume , getPortfolio , getProfileData};

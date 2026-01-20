@@ -202,7 +202,7 @@ const addCertification = async (req,res) =>{
         const userId = req.user.id;
         const {certificationName,issuingOrganization,issueDate} = req.body; 
         console.log("data : ", certificationName,issuingOrganization,issueDate);
-        const resumeData = await Resume.findOne({where:userId});
+        const resumeData = await Resume.findOne({where: {userId}});
         if(!resumeData){
             return res.status(404).json({message: "Resume NOT found"});
         }
@@ -288,7 +288,7 @@ const deleteArchivement = async (req,res) => {
         const {archivementId} = req.params;
         const userId = req.user.id;
          if(!userId){
-            return req.status(401).json({message:"Not Athenticated!!!"});
+            return req.status(401).json({message:"Not Authenticated!!!"});
         }
         const resumeData = await Resume.findOne({where : {userId}});
         if(!resumeData){
@@ -303,4 +303,29 @@ const deleteArchivement = async (req,res) => {
 }
 
 
-module.exports = { deleteSingleSkill, addSkill , delelteExperience , addExperience , deleteProject , addProject, deleteEducation, addEducation , addCertification, deleteCertification , addArchivement, deleteArchivement};
+const editProfile = async (req, res) => {
+    try {
+        const {fullname , email , phone , address , summary} = req.body;
+        const userId = req.user.id;
+        if (!userId){
+            return res.status(401).json({message: "Not Authenticated!!!"});
+        }
+        await Resume.update({
+            fullname,
+            email,
+            phone,
+            address,
+            summary
+        },
+        {
+            where: {userId}
+        }
+    )
+        return res.status(200).json({message: "Profile updated."});
+    } catch (error) {
+         return res.status(500).json({ message: "Server error" });
+    }
+}
+
+
+module.exports = { editProfile, deleteSingleSkill, addSkill , delelteExperience , addExperience , deleteProject , addProject, deleteEducation, addEducation , addCertification, deleteCertification , addArchivement, deleteArchivement};

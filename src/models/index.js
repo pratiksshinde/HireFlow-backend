@@ -7,7 +7,7 @@ const { ResumeProject } = require("./resume/resume_project");
 const { ResumeSkill } = require("./resume/resume_skills");
 const  Resume  = require("./resume/resumes");
 const { User } = require("./user");
-
+const  Applications  = require("./applications");
 
 const Models ={
     User,
@@ -19,6 +19,7 @@ const Models ={
     ResumeLink,
     ResumeProject,
     ResumeSkill,
+    Applications,
 };
 
 Object.values(Models).forEach(model => {

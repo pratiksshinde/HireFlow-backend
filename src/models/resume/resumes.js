@@ -15,6 +15,7 @@ const Resume = sequelize.define("resume", {
         type: DataTypes.TEXT,
         allowNull: true,
     },
+  
     email: {
         type: DataTypes.STRING,
         allowNull: true,

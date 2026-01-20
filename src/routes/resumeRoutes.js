@@ -1,13 +1,15 @@
 const routes = require("express").Router();
-const {uploadResume, getPortfolio} = require("../controllers/resumeController");
+const {uploadResume, getPortfolio, getProfileData} = require("../controllers/resumeController");
 const { authMiddleware } = require("../middleware/authMiddleware");
-const { deleteSingleSkill , addSkill , delelteExperience ,deleteEducation, deleteProject, addProject, addEducation, addCertification, deleteCertification, addArchivement, deleteArchivement} = require("../controllers/editResumeController");
+const { deleteSingleSkill , addSkill , delelteExperience ,deleteEducation, deleteProject, addProject, addEducation, addCertification, deleteCertification, addArchivement, deleteArchivement, editProfile} = require("../controllers/editResumeController");
 const upload = require("../middleware/upload.middleware");
 
 
 routes.post("/uploadResume", authMiddleware, upload.single("resume"), uploadResume);
 
 routes.get("/getPortfolio/:userName",  getPortfolio);
+
+routes.get("/getProfileData",authMiddleware,getProfileData);
 
 //edit resume routes
 routes.delete("/editResume/deleteskill/:skillId", authMiddleware, require("../controllers/editResumeController").deleteSingleSkill);
@@ -26,5 +28,7 @@ routes.delete("/editResume/deleteCertification/:certificationId" , authMiddlewar
 
 routes.post("/editResume/addArchivement", authMiddleware, addArchivement);
 routes.delete("/editResume/deleteArchivement/:archivementId", authMiddleware, deleteArchivement);
+
+routes.put("/editResume/editProfile", authMiddleware, editProfile);
 
 module.exports = routes;
