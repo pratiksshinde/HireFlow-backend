@@ -9,6 +9,6 @@ router.get("/suggestedJobs/list/:page", authMiddleware,getJobs);
 router.post("/coldMail", authMiddleware, JobMail);
 
 router.post("/createApplication", authMiddleware, createApplication);
-router.get("/getApplications", authMiddleware, getApplications);
+router.get("/getApplications/:page/:limit", authMiddleware, getApplications);
 router.delete("/deleteApplication/:applicationId", authMiddleware, deleteApplication);
 module.exports = router;

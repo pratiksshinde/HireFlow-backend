@@ -83,8 +83,12 @@ const createApplication = async (req, res)=>{
 const getApplications = async (req , res)=>{
   try {
     const userId = req.user.id;
-    const applications = await Applications.findAll({where: {userId}});
-    return res.status(200).json({applications ,message:"Got Applications."})
+    const page = Number(req.params.page) || 1;
+    const limit = Number(req.params.limit) || 10;
+    const offset = (page - 1) * limit;
+
+    const applications = await Applications.findAndCountAll({where: {userId}, limit, offset , order: [['createdAt', 'DESC']]});
+    return res.status(200).json({data:applications ,pagination : {total: applications.count, page, limit},message:"Got Applications."})
   } catch (error) {
     console.error(error?.response?.data || error.message);
     return res.status(500).json({ message: "Server error" });

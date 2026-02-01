@@ -53,6 +53,7 @@ const genrateMailBody = async (data) => {
     Candidate Info:
     Name: ${user.name}
     Summary: ${user.summary || 'Passionate developer'}
+    Phone: ${user.phone}
 
     Skills: ${skillsList}
 
@@ -71,7 +72,7 @@ const genrateMailBody = async (data) => {
     3. Briefly references a specific project or achievement
     4. Shows genuine interest in the company/role
     5. Ends with a simple call to action
-    6. Signs off with just the candidate's name
+    6. Signs off with just the candidate's name and phone number
 
     Format with blank lines between each paragraph. Keep it under 150 words total.
   `;

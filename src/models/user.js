@@ -17,6 +17,18 @@ const User = sequelize.define("User", {
         allowNull: false,
         unique: true,
     },
+    subscriptionStatus:{
+        type: DataTypes.STRING,
+        defaultValue: "free"
+    },
+    coldEmailCount:{
+        type: DataTypes.INTEGER,
+        defaultValue: 0
+    },
+    coldEmailResetAt:{
+        type: DataTypes.DATE,
+        allowNull:true
+    },
     password: {
         type: DataTypes.STRING,
         allowNull: false,

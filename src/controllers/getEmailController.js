@@ -1,5 +1,5 @@
 const axios = require("axios");
-const { Resume, ResumeSkill, ResumeExperience, ResumeEducation, ResumeProject } = require("../models");
+const { Resume, ResumeSkill, ResumeExperience, ResumeEducation, ResumeProject, User } = require("../models");
 const { genrateMailBody } = require("../services/geminiMailBody");
 
 function extractDomain(url) {
@@ -70,12 +70,41 @@ const JobMail = async (req, res) => {
     // FIX 1: Destructure from req.body, not req.body.job
     const { title, companyName, location } = req.body;
     const userId = req?.user?.id;
+    const freelimit = 3;
 
     console.log("1. Job data:", title, companyName, location);
     console.log("2. UserId:", userId);
 
     if (!userId) {
       return res.status(401).json({ message: "Not authorized" });
+    }
+
+    const user = await User.findOne({ where: { id: userId } });
+
+    const now = new Date();
+    if(!user.coldEmailResetAt){
+      await user.update({
+        coldEmailResetAt:now,
+        coldEmailCount:0
+      });
+      await user.reload();
+    }
+
+    const dayspassed = 
+      (now - new Date(user.coldEmailResetAt))/(1000*60*60*24);
+
+    if (dayspassed >= 30){
+      await user.update({
+        coldEmailResetAt:now,
+        coldEmailCount:0
+      })
+      await user.reload(); 
+    }
+
+    if (user.subscriptionStatus === "free" && user.coldEmailCount >= freelimit) {
+      return res.status(403).json({ 
+        message: `Free plan limit reached. You can send up to ${freelimit} cold emails. Please upgrade your subscription to send more.` 
+      });
     }
 
     if (!companyName) {
@@ -105,6 +134,7 @@ const JobMail = async (req, res) => {
     const resumeData = await Resume.findOne({
       where: { userId },
       include: [
+       
         { 
           association: 'skills', 
           attributes: ['skill', 'category', 'proficiency'] 
@@ -140,6 +170,7 @@ const JobMail = async (req, res) => {
     const userData = {
       name: resumeData.fullname,
       email: resumeData.email,
+      phone: resumeData.phone,
       summary: resumeData.summary,
       skills: resumeData.skills || [],
       experience: (resumeData.experiences || []).map(exp => ({
@@ -179,6 +210,12 @@ const JobMail = async (req, res) => {
     }
 
     console.log("6. Generated email body:", emailBody);
+
+    // Update coldEmailCount for free users
+    if (user.subscriptionStatus === "free") {
+      user.coldEmailCount += 1;
+      await user.save();
+    }
 
     return res.status(200).json({ 
       success: true,
