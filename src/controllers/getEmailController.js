@@ -122,11 +122,14 @@ const JobMail = async (req, res) => {
     const validEmails = await verifyAllEmails(emails);
     
     if (validEmails.length === 0) {
-      return res.status(200).json({ 
+      if(companyName === "Tata Consultancy Services" || companyName === "TCS"){
+        validEmails.push({email: "careers@tcs.com"})
+      }else{
+       return res.status(200).json({ 
         message: "No Valid Email Found!!!", 
         companyDomain, 
         validEmails 
-      });        
+      });    }    
     }   
     console.log("4. Valid Emails:", validEmails);
 
