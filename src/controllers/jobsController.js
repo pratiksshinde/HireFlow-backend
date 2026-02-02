@@ -19,8 +19,7 @@ const getJobs = async (req, res) => {
     // const skills = resumeData?.skills || [];
 
    const response = await axios.get(
-  `https://api.adzuna.com/v1/api/jobs/in/search/${page}&company_exclude=Tata Consultancy Services|TCS
-`,
+  `https://api.adzuna.com/v1/api/jobs/in/search/${page}`,
   {
     params: {
       app_id: process.env.APP_ID,
