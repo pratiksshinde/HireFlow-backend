@@ -33,6 +33,7 @@ const Login = async (req, res) => {
             samesite: "strict",
             maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
         })
+        console.log("Login Successful:", user.username ,token , isResume);
         return res.status(200).json({ message: "Login Successful", userName: user.username, userId: user.id, isResume });
 
     } catch (error) {
