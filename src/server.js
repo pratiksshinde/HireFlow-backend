@@ -29,7 +29,7 @@ sequelize
     .authenticate()
     .then(() => {
         console.log("Database connected...");
-        // sequelize.sync({alter:true});
+        sequelize.sync({alter:true});
     })
     .catch((err) => {
         console.log("Error: " + err);
